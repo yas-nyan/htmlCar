@@ -47,3 +47,56 @@ https://www.w3.org/TR/2016/WD-vehicle-information-api-20160119/
 
 * ケース作りとかプレゼンとかペルソナづくりとか見栄え担当
 →生駒
+
+
+
+# 実装
+それぞれW3Cのドラフトの通りの名前です。
+
+車
+|
+| Vehicle Signal Specification(VSS)
+|
+API サーバー WebSocket Vehicle Information Service (WVIS)
+|
+| Vehicle Information Service Specification (VISS)
+|
+JSライブラリ
+|
+| Vehicle Information API Specification (VIAS)
+|
+なんかアプリケーション
+
+## Vehicle Signal Specification(VSS)
+* 今回はELM327との接続になるので、それようのコードを使う。
+* Vehicle Dataを参照して、OBD2PIDとの辞書を作ってhoge.jsonにしておく。
+
+###  実装
+* Node.js モジュール
+* 下記のものを^^パクる^^参考にする。
+https://www.npmjs.com/package/bluetooth-obd
+https://www.npmjs.com/package/obd-parser-serial-connection
+
+
+
+## WebSocket Vehicle Information Service (WVIS)
+https://w3c.github.io/automotive/vehicle_data/vehicle_information_service.html
+###  実装
+* Node.js 
+* 普通のWSのサーバーを作る
+## Vehicle Information Service Specification (VISS)
+https://w3c.github.io/automotive/vehicle_data/vehicle_information_service.html
+
+## Vehicle Information API  Specification (VIAS)
+http://rawgit.com/w3c/automotive/master/vehicle_data/vehicle_spec.html
+###  実装
+* JSライブラリ（本当はWEBIDLで作るべき）
+* 今回はただVehicleっていう名前空間に宣言するJSのファイルにする。
+
+
+## Vehicle Data 
+https://w3c.github.io/automotive/vehicle_data/data_spec.html
+
+###  実装
+* OBD2PIDとの辞書を作ってhoge.jsonにしておく。
+* とりあえず読み込みだけなので、命令の部分はVSSでは決め打ちにする。

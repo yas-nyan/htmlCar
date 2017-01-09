@@ -1,0 +1,11 @@
+{
+  "name": "wvis",
+  "version": "0.0.0",
+  "description": "WebSocket Vehicle Information Service(WVIS)　",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "0",
+  "license": "ISC"
+}
