@@ -12,13 +12,22 @@ http://itpro.nikkeibp.co.jp/atcl/column/14/080600036/080700003/?rt=nocnt
 >その実装は、インターフェイス定義言語のWebIDLを使用しています。WebIDLでインターフェイスを定義し、インターフェイスで定義したメソッドを実装します。例えば、車載でギアの情報を取得する際にも同様の手順で実装すればよいでしょう。
 
 
+次世代車載情報通信システム（In-Vehicle Infotainment system，IVIシステム） スマートドライブによる無限の可能性を開発 未来の新テクノロジーに、ドライブ･イン！
+http://www.technical-direct.com/jp/2013-12/%E6%AC%A1%E4%B8%96%E4%BB%A3%E8%BB%8A%E8%BC%89%E6%83%85%E5%A0%B1%E9%80%9A%E4%BF%A1%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%EF%BC%88in-vehicle-infotainment-system%EF%BC%8Civi%E3%82%B7%E3%82%B9%E3%83%86/
+
+
 W3Cの解説
 https://www.w3.org/2016/Talks/0130-web+auto-ka/
 
+Automotiveワーキンググループ
+https://www.w3.org/auto/wg/wiki/Main_Page
+サービス全体をまとめたドラフト
 
-データシート
-http://www.w3.org/2014/automotive/data_spec.html
-http://www.w3.org/2014/automotive/vehicle_spec.html
+https://w3c.github.io/automotive/vehicle_data/vehicle_information_service.html
+Vehicle Information Access APIのドラフト
+http://rawgit.com/w3c/automotive/master/vehicle_data/vehicle_spec.html
+Vehicle Data
+http://rawgit.com/w3c/automotive/master/vehicle_data/data_spec.html
 
 
 実際に作ったらしい
