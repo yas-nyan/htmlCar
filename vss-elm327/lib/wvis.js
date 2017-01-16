@@ -2,6 +2,9 @@ const obd2 = require('obd2');
 const WebSocketServer = require('ws').Server;
 const debug = require("debug")("WVIS");
 
+//VSSTree
+const VSSTree = require()
+
 class Wvis {
     constructor(wsSettings, obd2Settings) {
         /* ws用の設定引数 */
@@ -38,9 +41,9 @@ class Wvis {
                 this.receive(client, data);
             });
 
-            client.on("", (data) => {
-                //データを貰ったらreceive送る。
-                this.receive(client, data);
+            client.on("error", (data) => {
+                debug("connection error.");
+                this.server.close();
             });
         });
 
@@ -51,6 +54,24 @@ class Wvis {
         //clintにはwsのclient,reqJSONは送らてきたRequestのJSON(未JSON.Parse)が入る。
         try {
             let req = JSON.parse(reqJSON);
+
+            //actionの種類によって分類
+            switch (req.action) {
+                case "get":
+                    //getの時
+
+
+
+                case "subscribe":
+                    //subscribeの時
+
+
+                case "unsubscribe":
+                    //unsubscribeの時
+
+
+
+            }
 
         } catch (e) {
             debug("request error. Data format is invailed");

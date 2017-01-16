@@ -1,0 +1,65 @@
+{
+    "Attribute": {},
+    "Signal": {
+        "Body": {},
+        "Drivetrain": {
+            "Transmission": {
+                "Speed": {
+                    "pid": "0D"
+                }
+            },
+            "FuelSystem": {
+                /*
+                
+                未実装
+                */
+                "ConsumptionSinceStart": {
+                    "description": "Fuel amount consumed since start in milliliters.",
+                    "type": "UInt32",
+                    "id": 76,
+                    "unit": "ml"
+                },
+                "TimeSinceStart": {
+                    "type": "UInt32",
+                    "id": 77,
+                    "unit": "s",
+                    "description": "Time elapsed since start in seconds."
+                },
+                "InstantConsumption": {
+                    "description": "Current consumption in milliliters per 100 km.",
+                    "type": "UInt32",
+                    "id": 74,
+                    "unit": "ml/100km"
+                },
+                "Level": {
+                    "type": "UInt8",
+                    "id": 72,
+                    "unit": "percentage",
+                    "description": "Level in fuel tank as percentage of capacity. 0 = empty. 100 = full."
+                },
+                "Range": {
+                    "description": "Range in meters.",
+                    "type": "UInt32",
+                    "id": 73,
+                    "unit": "m"
+                },
+                "AverageConsumption": {
+                    "description": "Average consumption in milliliters per 100 km.",
+                    "type": "UInt32",
+                    "id": 75,
+                    "unit": "ml/100km"
+                }
+
+            },
+            "InternalCombustionEngine": {
+                "MAF": {
+                    "pid": "10"
+                },
+                "RPM": {
+                    "pid": "0C"
+                }
+            }
+        }
+
+    }
+}
