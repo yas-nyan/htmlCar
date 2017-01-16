@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>私の世界</title>
+    <script src='test.js'></script>
+    <script>
+      Vehicle.vehicleSpeed.get().then(function (vehicleSpeed) {
+        document.getElementById('vehicleSpeed').innerHTML = vehicleSpeed;
+      };
+      Vehicle.engineSpeed.get().then(function (engineSpeed) {
+        document.getElementById('engineSpeed').innerHTML = engineSpeed;
+      };
+      Vehicle.fuelConsumption.get().then(function (fuelConsumption) {
+        document.getElementById('fuelConsumphtion').innerHTML = fuelConsumption;
+      };
+    </script>
+  </head>
+  <body>
+    <div id='vehicleSpeed'></div>
+    <div id='engineSpeed'></div>
+    <div id='fuelConsumption'></div>
+  </body>
+</html>
