@@ -29,18 +29,17 @@ http.listen(3000, function() {
     OBD.start(function() {
         debug("OBD2 example start");
         OBD.on("dataParsed", function(type, elem, data) {
-            console.log("dataParsed:", type, elem, data);
             io.emit('obd2', type, elem, data);
         });
 
         OBD.on("pid", function(data) {
-            console.log("pid:", data);
             io.emit('pid', data);
         });
-        OBD.readPID("0C");
+        OBD.readPID("0C","01");
         OBD.readPID("0D");
-        setTimeout(() => {
-            debug(OBD.Ticker);
+        setInterval(() => {
+            debug(OBD.Ticker.commands);
+						OBD.Ticker.commands.pop()
         }, 1000);
         /*
         OBD.listPID(function(pidList) {

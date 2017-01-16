@@ -1,0 +1,22 @@
+{
+    "Attribute": {},
+    "Signal": {
+        "Body": {},
+        "Drivetrain": {
+            "Transmission": {
+                "Speed": {
+                    "pid": "0D"
+                }
+            },
+            "InternalCombustionEngine": {
+                "MAF": {
+                    "pid": "10"
+                },
+                "RPM": {
+                    "pid": "0C"
+                }
+            }
+        }
+
+    }
+}
