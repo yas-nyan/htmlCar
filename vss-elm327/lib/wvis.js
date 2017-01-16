@@ -88,7 +88,12 @@ class Wvis {
                     delete returnObj.path
 
                     //帰ってきた値を入れる。
-                    returnObj.value[path] = data.value;
+                    returnObj.value = data.value;
+                    //returnObj.value[path] = data.value;
+
+                    //タイムスタンプを入れる。
+                    returnObj.timestamp = Date.now();
+
                     //返送する。
                     client.send(JSON.stringify(returnObj));
                 });
@@ -106,7 +111,12 @@ class Wvis {
                     delete returnObj.path
 
                     //帰ってきた値を入れる。
-                    returnObj.value[path] = data.value;
+                    returnObj.value = data.value;
+                    //returnObj.value[path] = data.value;
+
+                    //タイムスタンプを入れる。
+                    returnObj.timestamp = Date.now();
+
                     //返送する。
                     client.send(JSON.stringify(returnObj));
                 });
@@ -162,6 +172,7 @@ class Wvis {
                     "status": "success",
                     "requestId": req.requestId
                 }
+                client.send(JSON.stringify(returnObj));
             } else {
                 //actionが不正です。
                 debug("request error. Action is invailed");
