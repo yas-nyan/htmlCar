@@ -1,5 +1,5 @@
 process.env.NODE_ENV = "debug";
-process.env.DEBUG = "Example,OBD2.*";
+process.env.DEBUG = "WVIS,OBD2.*";
 
 const obd2 = require('obd2');
 const WebSocketServer = require('ws').Server;
@@ -56,102 +56,137 @@ class Wvis {
     }
 
     receive(client, reqJSON) {
-        //clintにはwsのclient,reqJSONは送らてきたRequestのJSON(未JSON.Parse)が入る。
-        try {
-            let req = JSON.parse(reqJSON);
-            //本当は送られてきたreqのpathが実在してるか確認しなければならない。
-            let path = req.path;
-            let pid = eval("VSSTree." + req.path + ".pid")
+            //clintにはwsのclient,reqJSONは送らてきたRequestのJSON(未JSON.Parse)が入る。
+            let req, path, pid;
+            try {
+                req = JSON.parse(reqJSON);
+                //本当は送られてきたreqのpathが実在してるか確認しなければならない。
+                path = req.path;
+                pid = eval("VSSTree." + req.path + ".pid");
+            } catch (e) {
+                debug("request error. Data format is invailed");
+                //結果を返送する。
+                let returnObj = {
+                    "status": "failed"
+                }
+                client.send(JSON.stringify(returnObj));
+                return;
+            }
 
 
 
-            //actionの種類によって分類
-            switch (req.action) {
-                //auth,vssreqは無視。
+            if (req.action == "get") {
 
-                case "get":
-                    //getの時
-                    //単発なのでsendPID
-                    this.OBD.sendPID(pid, "01", (data) => {
-                        //返送用のobj
-                        let returnObj = req;
+                //getの時
+                //単発なのでsendPID
+                this.OBD.sendPID(pid, "01", (data) => {
+                    //返送用のobj
+                    let returnObj = req;
 
-                        //成型する。
-                        returnObj.value = {}
-                        delete returnObj.path
+                    //成型する。
+                    returnObj.value = {}
+                    delete returnObj.path
 
-                        //帰ってきた値を入れる。
-                        returnObj.value[req.path] = data.value;
-                        //返送する。
-                        client.send(JSON.stringify(returnObj));
-                    });
-                    break;
-                case "subscribe":
-                    //subscribeの時
-                    //連発なのでsendPID
-                    this.OBD.readPID(pid, "01", (data) => {
-                        //返送用のobj
-                        let returnObj = req;
+                    //帰ってきた値を入れる。
+                    returnObj.value[path] = data.value;
+                    //返送する。
+                    client.send(JSON.stringify(returnObj));
+                });
 
-                        //成型する。
-                        returnObj.value = {}
-                        delete returnObj.path
+            } else
+            if (req.action == "subscribe") {
+                //subscribeの時
+                //連発なのでsendPID
+                this.OBD.readPID(pid, "01", (data) => {
+                    //返送用のobj
+                    let returnObj = req;
 
-                        //帰ってきた値を入れる。
-                        returnObj.value[req.path] = data.value;
-                        //返送する。
-                        client.send(JSON.stringify(returnObj));
-                    });
+                    //成型する。
+                    returnObj.value = {}
+                    delete returnObj.path
+
+                    //帰ってきた値を入れる。
+                    returnObj.value[path] = data.value;
+                    //返送する。
+                    client.send(JSON.stringify(returnObj));
+                });
 
 
-                    //PIDを先に入れておく。
-                    req["pid"] = pid;
-                    //登録しておく。
-                    this.nowSubscribing[req.requestId] = req;
+                //PIDを先に入れておく。
+                req["pid"] = pid;
+                //登録しておく。
+                this.nowSubscribing[req.requestId] = req;
 
+            } else
+            if (req.action == "unsubscribe") {
 
-                    break;
-
-
-                case "unsubscribe":
-                    //unsubscribeの時、
-                    //サブスクライブした時のreq
-                    let firstReq = this.nowSubscribing[req.requestId];
-
-                    let pid = firstReq.pid;
-                    //もう決め打ちする他無い
-                    let targetCmddata = "01" + pid + "\r";
-                    for (cmd of this.OBD.Ticker.commands) {
-                        //当てはまるコマンドならデリートする。
-                        if (cmd.data == targetCmddata) {
-                            delete this.OBD.Ticker.commands[targetCmddata];
-                            break;
-                        }
-                    }
-                    //購読中からこれを消す。
-                    delete this.nowSubscribing[req.requestId];
-
+                //もし今回来たRequestが今までにあったものじゃなければ、
+                if (!this.nowSubscribing[req.requestId]) {
+                    //actionが不正です。
+                    debug("request error. Nothing is not able to unsubscribe.");
                     //結果を返送する。
                     let returnObj = {
-                        "status": "success",
+                        "status": "failed",
                         "requestId": req.requestId
                     }
-
                     client.send(JSON.stringify(returnObj));
-                    break;
+                    return;
+                }
 
+                //unsubscribeの時、
+                //サブスクライブした時のreq
+                let firstReq = this.nowSubscribing[req.requestId];
+                //もう決め打ちする他無い
+                let targetCmddata = "01" + firstReq.pid + 1 + "\r";
+                for (let num in this.OBD.Ticker.commands) {
+                    //当てはまるコマンドならデリートする。
+                    if (this.OBD.Ticker.commands[num].data == targetCmddata) {
+                        this.OBD.Ticker.delItem("PID", targetCmddata);
+                    }
+                }
+                //購読中からこれを消す。
+                delete this.nowSubscribing[req.requestId];
+
+                //結果を返送する。
+                let returnObj = {
+                    "status": "success",
+                    "requestId": req.requestId
+                }
+
+                client.send(JSON.stringify(returnObj));
+
+            } else if (req.action == "unsubscribeAll") {
+                this.OBD.Ticker.stop();
+                //結果を返送する。
+                let returnObj = {
+                    "status": "success",
+                    "requestId": req.requestId
+                }
+            } else {
+                //actionが不正です。
+                debug("request error. Action is invailed");
+                //結果を返送する。
+                let returnObj = {
+                    "status": "failed",
+                    "requestId": req.requestId
+                }
+                client.send(JSON.stringify(returnObj));
+                return;
             }
 
-        } catch (e) {
-            debug("request error. Data format is invailed");
-            //結果を返送する。
-            let returnObj = {
-                "status": "failed"
-            }
-            client.send(JSON.stringify(eturnObj));
+
         }
-    }
-
+        /*
+                } catch (e) {
+                    debug("request error. Data format is invailed");
+                    //結果を返送する。
+                    let returnObj = {
+                        "status": "failed"
+                    }
+                    client.send(JSON.stringify(returnObj));
+                }
+                */
 }
+
 
 module.exports = Wvis;

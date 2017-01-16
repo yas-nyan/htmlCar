@@ -35,7 +35,7 @@ http.listen(3000, function() {
         OBD.on("pid", function(data) {
             io.emit('pid', data);
         });
-        OBD.readPID("0C","01");
+        OBD.sendPID("0C","01");
         OBD.readPID("0D");
         setInterval(() => {
             debug(OBD.Ticker.commands);
