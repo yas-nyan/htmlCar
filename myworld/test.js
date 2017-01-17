@@ -59,7 +59,9 @@ class VehicleSignalInterface {
             if (event.status == 'failes') {
 
             } else {
-                callback(JSON.parse(event.data));
+                if (event.data.path == this.path) {
+                    callback(JSON.parse(event.data));
+                }
             }
 
         });
