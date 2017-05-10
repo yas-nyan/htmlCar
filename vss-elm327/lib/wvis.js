@@ -23,8 +23,8 @@ class Wvis {
             serial: "fake", // usb, bluetooth
             port: "/dev/ttyUSB0", // Device COM port / path
             baud: 38400, // Device baud rate
-            delay: 50, // Ticker delay time (ms)
-            cleaner: true // Automatic ticker list cleaner ( ex. PID not supported, no response )
+            delay: 0, // Ticker delay time (ms)
+            cleaner: false // Automatic ticker list cleaner ( ex. PID not supported, no response )
         };
         //}
 
@@ -101,7 +101,7 @@ class Wvis {
             } else
             if (req.action == "subscribe") {
                 //subscribeの時
-                //連発なのでsendPID
+                //連発なのでreadPID
                 this.OBD.readPID(pid, "01", (data) => {
                     //返送用のobj
                     let returnObj = req;

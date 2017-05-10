@@ -19,14 +19,21 @@
         */
 
         function getParam(param) {
+            let reqTime = Date.now();
             vehicle[param].get().then((data) => {
                 document.getElementById(param).innerHTML = data.value;
+                let rsvTime = Date.now();
+                document.getElementById(param + "_time").innerHTML = rsvTime - reqTime;
             })
         }
 
         function subscribeParam(param) {
+            let reqTime = Date.now();
             vehicle[param].subscribe((data) => {
+                let rsvTime = Date.now();
                 document.getElementById(param).innerHTML = data.value;
+                document.getElementById(param + "_time").innerHTML = rsvTime - reqTime;
+                reqTime = rsvTime;
             })
         }
 
@@ -55,23 +62,28 @@
 
         <input type="button" value="接続" onclick="init()">
         <p>速度</p>
+        <p>データ取得までの時間：<span id="vehicleSpeed_time"></span>ms.</p>
         <div id='vehicleSpeed'></div>km/h
         <br>
         <input type="button" value="unsubscribe" onclick="unsubscribeParam('vehicleSpeed')">
         <input type="button" value="subscribe" onclick="subscribeParam('vehicleSpeed')">
         <input type="button" value="get" onclick="getParam('vehicleSpeed')">
         <p>エンジン速度</p>
+        <p>データ取得までの時間：<span id="engineSpeed_time"></span>ms.</p>
+        <br>
         <div id='engineSpeed'></div>rpm
         <br>
         <input type="button" value="unsubscribe" onclick="unsubscribeParam('engineSpeed')">
         <input type="button" value="subscribe" onclick="subscribeParam('engineSpeed')">
         <input type="button" value="get" onclick="getParam('engineSpeed')">
-        <p>MAF</p>g
+        <p>MAF</p>
+        <p>データ取得までの時間：<span id="MAF_time"></span>ms.</p>
+        <div id='MAF'></div>g
         <br>
         <input type="button" value="unsubscribe" onclick="unsubscribeParam('MAF')">
         <input type="button" value="subscribe" onclick="subscribeParam('MAF')">
         <input type="button" value="get" onclick="getParam('MAF')">
-        <div id='MAF'></div>
+        
     </div>
 </body>
 
